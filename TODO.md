@@ -1,9 +1,9 @@
 # Todo
 
 - [ ] Find datasets for multiple languages
-  - [ ] English
-  - [ ] Italian
-  - [ ] Whatever is on Kaggle
+  - [ ] English (Zahra)
+  - [ ] Italian (Paolo)
+  - [ ] Whatever is on Kaggle (Ettore)
 
 - [ ] Fix the vm (might be memory config)
 
