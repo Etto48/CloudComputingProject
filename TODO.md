@@ -1,15 +1,17 @@
 # Todo
 
-- [ ] Find datasets for multiple languages
-  - [ ] English (Zahra)
-  - [ ] Italian (Paolo)
-  - [ ] Whatever is on Kaggle (Ettore)
+- [x] Find datasets for multiple languages
+  - [x] English (Zahra)
+  - [x] Italian (Paolo)
+  - [x] Whatever is on Kaggle (Ettore)
 
-- [ ] Fix the vm (might be memory config)
+- [x] Fix the vm (might be memory config)
+
+- [x] Parse the data into raw txt containing text only
 
 - [ ] Write a version of the program that works and remember to add
-  - [ ] Combiner and In-Mapper Combiner
-  - [ ] Setup and Cleanup methods
+  - [x] Combiner and In-Mapper Combiner
+  - [x] Setup and Cleanup methods
   - [ ] Add experiments with different number of reducers
 
 - [ ] Carry out experiments
