@@ -4,7 +4,7 @@ import argparse
 
 def main(csv_file: str):
     df = pd.read_csv(csv_file, header=None, names=['letter', 'frequency', 'total'], delimiter='\t')
-    df.plot(x='letter', y='frequency', kind='bar', legend=False, grid=True)
+    df.plot(x='letter', y='frequency', kind='bar', legend=False)
     plt.show()
     
 if __name__ == '__main__':
