@@ -4,5 +4,5 @@ use serde::{Deserialize, Serialize};
 pub struct CsvEntry {
     pub character: char,
     pub frequency: f64,
-    pub total: u64,
+    pub count: u64,
 }

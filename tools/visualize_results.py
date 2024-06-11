@@ -4,6 +4,7 @@ import argparse
 
 def main(csv_file: str):
     df = pd.read_csv(csv_file, header=None, names=['letter', 'frequency', 'total'], delimiter='\t')
+    df.sort_values('letter', inplace=True)
     df.plot(x='letter', y='frequency', kind='bar', legend=False)
     plt.show()
     

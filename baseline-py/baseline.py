@@ -11,9 +11,9 @@ def main(input_file: str, output_file: str):
     total = 0
     letter_dict = {}
     
-    file = unidecode(file.lower())
+    file = unidecode(file).lower()
     for letter in file:
-        if letter.isalpha():
+        if letter.islower() and letter.isalpha():
             if letter in letter_dict:
                 letter_dict[letter] += 1
             else:
@@ -21,10 +21,11 @@ def main(input_file: str, output_file: str):
             total += 1
     
     for letter in letter_dict:
-        letter_dict[letter] = letter_dict[letter] / total        
+        letter_dict[letter] = (letter, letter_dict[letter] / total, letter_dict[letter])
     
-    df = pd.DataFrame(letter_dict.items(), columns=['letter', 'frequency']).sort_values(by='letter')
-    df['total'] = total
+    
+    
+    df = pd.DataFrame(letter_dict.values(), columns=['letter', 'frequency', 'count']).sort_values(by='letter')
     df.to_csv(output_file, sep='\t', index=False, header=False)
     print(f"Done in {(time.time() - start)}s")
     

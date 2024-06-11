@@ -10,10 +10,10 @@ fn main() {
     let args = Args::parse();
     
     let input = std::fs::read_to_string(args.input).unwrap();
-    let input = input.to_lowercase();
     let input = unidecode(&input);
+    let input = input.to_lowercase();
     for c in input.chars() {
-        if c.is_ascii_alphabetic() {
+        if c.is_ascii_lowercase() {
             let index = c as usize - 'a' as usize;
             values[index] += 1;
             values[LETTER_COUNT] += 1;
@@ -26,7 +26,7 @@ fn main() {
         output.push(CsvEntry {
             character: (i as u8 + 'a' as u8) as char,
             frequency,
-            total: values[LETTER_COUNT],
+            count: values[i],
         });
     }
     let output_file = std::fs::File::create(args.output).unwrap();

@@ -6,9 +6,11 @@ import java.util.Vector;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.io.Text;
 
-public class Mapper extends org.apache.hadoop.mapreduce.Mapper<Object, Text, Text, FrequencyTotalPairWritable> {
+public class Mapper extends org.apache.hadoop.mapreduce.Mapper<Object, Text, Char, CountTotalPairWritable> {
     private final static int LETTER_COUNT = 26; 
     private final Vector<Integer> values = new Vector<Integer>();
+    private final Char key = new Char();
+    private final CountTotalPairWritable value = new CountTotalPairWritable();
 
     @Override
     public void setup(Context context) {
@@ -23,9 +25,9 @@ public class Mapper extends org.apache.hadoop.mapreduce.Mapper<Object, Text, Tex
     public void cleanup(Context context) throws IOException, InterruptedException {
         int total = values.get(LETTER_COUNT);
         for (int i = 0; i < LETTER_COUNT; i++) {
-            Text key = new Text(Character.toString((char) ('a' + i)));
-            double frequency = (double) values.get(i) / total;
-            context.write(key, new FrequencyTotalPairWritable(frequency, total));
+            key.set((char)('a' + i));
+            value.set(values.get(i), total);
+            context.write(key, value);
         }
     }
 
