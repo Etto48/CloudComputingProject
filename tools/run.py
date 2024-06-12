@@ -2,22 +2,22 @@ import argparse
 import os
 
 args_for_output = [
-    "-i italian_1GB.txt -r 2"
-    "-i english.txt -r 2"
-    "-i spanish.txt -r 2"
+    "-i italian_1GB.txt -r 2",
+    "-i english.txt -r 2",
+    "-i spanish.txt -r 2",
 ]
 
 args_for_tests = [
-    "-i english.txt -r 1"
-    "-i english.txt -r 2"
-    "-i english.txt -r 4"
-    "-i english.txt -r 8"
-    "-i english.txt -r 1 --no-combiner"
-    "-i english.txt -r 1 --no-in-mapper-combiner"
-    "-i english.txt -r 1 --no-in-mapper-combiner --no-combiner"
-    "-i english.txt -r 4 --no-combiner"
-    "-i english.txt -r 4 --no-in-mapper-combiner"
-    "-i english.txt -r 4 --no-in-mapper-combiner --no-combiner"
+    "-i english.txt -r 1",
+    "-i english.txt -r 2",
+    "-i english.txt -r 4",
+    "-i english.txt -r 8",
+    "-i english.txt -r 1 --no-combiner",
+    "-i english.txt -r 1 --no-in-mapper-combiner",
+    "-i english.txt -r 1 --no-in-mapper-combiner --no-combiner",
+    "-i english.txt -r 4 --no-combiner",
+    "-i english.txt -r 4 --no-in-mapper-combiner",
+    "-i english.txt -r 4 --no-in-mapper-combiner --no-combiner",
 ]
 
 def run(args: str, index: int, mode: str):
