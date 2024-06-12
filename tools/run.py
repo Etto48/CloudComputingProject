@@ -1,5 +1,6 @@
 import argparse
 import os
+import subprocess
 
 args_for_output = [
     "-i italian_1GB.txt -r 2",
@@ -18,19 +19,44 @@ args_for_tests = [
     "-i english.txt -r 4 --no-combiner",
     "-i english.txt -r 4 --no-in-mapper-combiner",
     "-i english.txt -r 4 --no-in-mapper-combiner --no-combiner",
+    "-i part_100MB.txt -r 1",
+    "-i part_200MB.txt -r 1",
+    "-i part_300MB.txt -r 1",
+    "-i part_400MB.txt -r 1",
+    "-i part_500MB.txt -r 1",
+    "-i part_600MB.txt -r 1",
+    "-i part_700MB.txt -r 1",
+    "-i part_800MB.txt -r 1",
+    "-i part_900MB.txt -r 1",
+    "-i part_1000MB.txt -r 1",
+    "-i part_1100MB.txt -r 1",
 ]
 
 def run(args: str, index: int, mode: str):
     log_path = f"{mode}_{index}.log"
     output_path = f"{mode}_{index}.csv"
     
-    os.system(f"hadoop jar letterfreq-0.1.0.jar it.unipi.LetterFreq {args} 2&>1 > {log_path}")
-    os.system(f"hadoop fs -getmerge output {output_path} 2&>1 > /dev/null")
+    cmd1 = f"hadoop jar letterfreq-0.1.0.jar it.unipi.LetterFreq {args}".split()
+    cmd2 = f"hadoop fs -getmerge output {output_path}".split()
+    
+    try:
+        log = subprocess.check_output(cmd1, stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        with open(log_path, "wb") as f:
+            f.write(e.output)
+        print(f"Job {index} failed with exit code {e.returncode}. Check {log_path} for more information.")
+        raise e
+        
+    _ = subprocess.check_output(cmd2, stderr=subprocess.STDOUT)
+    
+    with open(log_path, "wb") as f:
+        f.write(log)
+    
 
 def main(mode: str):
     arg_list = args_for_output if mode == "output" else args_for_tests
     for i,args in enumerate(arg_list):
-        print(f"Running job {i+1}/{len(args_for_output)} with args {args}...")
+        print(f"Running job {i+1}/{len(arg_list)} with args {args}...")
         run(args, i, mode)
 
 if __name__ == '__main__':
