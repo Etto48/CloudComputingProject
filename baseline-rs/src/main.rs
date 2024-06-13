@@ -1,3 +1,5 @@
+use std::io::{BufRead, BufReader};
+
 use baseline_rs::{args::Args, csv_entry::CsvEntry};
 use clap::Parser;
 use unidecode::unidecode;
@@ -6,28 +8,44 @@ use unidecode::unidecode;
 const LETTER_COUNT: usize = 26;
 fn main() {
     let start = std::time::Instant::now();
-    let mut values = vec![0;LETTER_COUNT + 1];
+    let mut values = [0;LETTER_COUNT + 1];
+    let mut output = [
+        CsvEntry::new('a'), CsvEntry::new('b'), CsvEntry::new('c'), CsvEntry::new('d'),
+        CsvEntry::new('e'), CsvEntry::new('f'), CsvEntry::new('g'), CsvEntry::new('h'),
+        CsvEntry::new('i'), CsvEntry::new('j'), CsvEntry::new('k'), CsvEntry::new('l'),
+        CsvEntry::new('m'), CsvEntry::new('n'), CsvEntry::new('o'), CsvEntry::new('p'),
+        CsvEntry::new('q'), CsvEntry::new('r'), CsvEntry::new('s'), CsvEntry::new('t'),
+        CsvEntry::new('u'), CsvEntry::new('v'), CsvEntry::new('w'), CsvEntry::new('x'),
+        CsvEntry::new('y'), CsvEntry::new('z')
+    ];
+
     let args = Args::parse();
     
-    let input = std::fs::read_to_string(args.input).unwrap();
-    let input = unidecode(&input);
-    let input = input.to_lowercase();
-    for c in input.chars() {
-        if c.is_ascii_lowercase() {
-            let index = c as usize - 'a' as usize;
-            values[index] += 1;
-            values[LETTER_COUNT] += 1;
+    let input = std::fs::File::open(args.input).unwrap();
+    let mut buf_reader = BufReader::with_capacity(1024*1024, input);
+    let mut line = String::new();
+
+    while let Ok(line_size) = buf_reader.read_line(&mut line)
+    {
+        if line_size == 0 {
+            break;
         }
+        let input = unidecode(&line);
+        let input = input.to_lowercase();
+        for c in input.chars() {
+            if c.is_ascii_lowercase() {
+                let index = c as usize - 'a' as usize;
+                values[index] += 1;
+                values[LETTER_COUNT] += 1;
+            }
+        }   
+        line.clear();
     }
 
-    let mut output = Vec::new();
     for i in 0..LETTER_COUNT {
         let frequency = values[i] as f64 / values[LETTER_COUNT] as f64;
-        output.push(CsvEntry {
-            character: (i as u8 + 'a' as u8) as char,
-            frequency,
-            count: values[i],
-        });
+        output[i].frequency = frequency;  
+        output[i].count = values[i];      
     }
     let output_file = std::fs::File::create(args.output).unwrap();
     let mut writer = csv::WriterBuilder::new()

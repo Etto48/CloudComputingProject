@@ -6,3 +6,13 @@ pub struct CsvEntry {
     pub frequency: f64,
     pub count: u64,
 }
+
+impl CsvEntry {
+    pub fn new(c: char) -> CsvEntry {
+        CsvEntry {
+            character: c,
+            frequency: 0.0,
+            count: 0,
+        }
+    }
+}
