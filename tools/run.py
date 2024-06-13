@@ -3,9 +3,9 @@ import os
 import subprocess
 
 args_for_output = [
-    "-i italian_1GB.txt -r 2",
-    "-i english.txt -r 2",
-    "-i spanish.txt -r 2",
+    "-i italian_1GB.txt -r 1",
+    "-i english.txt -r 1",
+    "-i spanish.txt -r 1",
 ]
 
 args_for_tests = [
@@ -53,14 +53,19 @@ def run(args: str, index: int, mode: str):
         f.write(log)
     
 
-def main(mode: str):
+def main(mode: str, skip_to: int):
     arg_list = args_for_output if mode == "output" else args_for_tests
     for i,args in enumerate(arg_list):
-        print(f"Running job {i+1}/{len(arg_list)} with args {args}...")
+        if i < skip_to:
+            print(f"Skipping job {i}/{len(arg_list)} with args {args}...")
+            continue
+        
+        print(f"Running job {i}/{len(arg_list)} with args {args}...")
         run(args, i, mode)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Run the LetterFreq Hadoop job")
     parser.add_argument("-m", "--mode", type=str, choices=["output", "tests"], default="output", help="Choose the mode to run the job")
+    parser.add_argument("-s", "--skip-to", type=int, default=0, help="Skip to a specific job")
     args = parser.parse_args()
-    main(args.mode)
+    main(args.mode, args.skip_to)

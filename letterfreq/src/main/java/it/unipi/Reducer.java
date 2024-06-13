@@ -2,19 +2,27 @@ package it.unipi;
 
 import java.io.IOException;
 
+import org.apache.hadoop.io.LongWritable;
+
 public class Reducer extends org.apache.hadoop.mapreduce.Reducer<
     Char,
-    CountTotalPairWritable,
+    LongWritable,
     Char,
-    CountTotalPairWritable> 
+    LongWritable> 
 { 
-    private final CountTotalPairWritable result = new CountTotalPairWritable();
-    public void reduce(Char key, Iterable<CountTotalPairWritable> values, Context context) 
+    private final LongWritable result = new LongWritable();
+    public void reduce(Char key, Iterable<LongWritable> values, Context context) 
         throws IOException, InterruptedException { 
-        result.set(0, 0);
-        for (CountTotalPairWritable val : values) { 
-            result.inPlaceSum(val);
+        long sum = 0;
+        for (LongWritable val : values) { 
+            sum += val.get();
         }
-        context.write(key, result); 
+        if (key.get() == '*') {
+            context.getCounter("LetterFreq", "total").setValue(sum);
+        }
+        else {
+            result.set(sum);
+            context.write(key, result); 
+        }
     } 
 }
