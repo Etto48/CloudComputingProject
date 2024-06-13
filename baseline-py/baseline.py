@@ -5,7 +5,7 @@ import time
 
 def main(input_file: str, output_file: str):
     start = time.time()
-    with open(input_file, "r") as f:
+    with open(input_file, "r", buffering=1024, encoding="utf-8", errors='ignore') as f:
         file = f.read()
         
     total = 0
@@ -31,7 +31,7 @@ def main(input_file: str, output_file: str):
     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Extract letter frequency from text')
-    parser.add_argument('input_file', type=str, help='Path to the input file')
-    parser.add_argument('output_file', type=str, help='Path to the output file')
+    parser.add_argument('-i','--input', type=str, help='Path to the input file')
+    parser.add_argument('-o','--output', type=str, help='Path to the output file')
     args = parser.parse_args()
-    main(args.input_file, args.output_file)
+    main(args.input, args.output)
