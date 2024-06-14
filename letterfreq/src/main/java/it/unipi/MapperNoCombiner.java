@@ -8,7 +8,7 @@ import org.apache.hadoop.io.Text;
 
 public class MapperNoCombiner extends org.apache.hadoop.mapreduce.Mapper<Object, Text, Char, LongWritable> {
     private final Char key = new Char();
-    private final LongWritable value = new LongWritable(1);
+    private final LongWritable one = new LongWritable(1);
 
     @Override
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException { 
@@ -17,12 +17,10 @@ public class MapperNoCombiner extends org.apache.hadoop.mapreduce.Mapper<Object,
             int lowerC = Character.toLowerCase(c);
             if (lowerC >= 'a' && lowerC <= 'z') {
                 this.key.set((char)lowerC);
-                context.write(this.key, this.value);
+                context.write(this.key, this.one);
                 sum++;
             }
         };
-        this.key.set('*');
-        this.value.set(sum);
-        context.write(this.key, this.value);
+        context.getCounter("LetterFreq", "total").increment(sum);
     }
 }

@@ -1,9 +1,14 @@
 import subprocess
 import argparse
+import os
 
 def main(mode: str, from_index: int, to_index: int, connection_str: str):
     files = [f"{mode}_{i}.csv" for i in range(from_index, to_index)] +\
         [f"{mode}_{i}.log" for i in range(from_index, to_index)]
+        
+    for file in files:
+        os.remove(f"./{mode}/{file}")
+        
     subprocess.run(f"scp {connection_str}:~/{{{",".join(files)}}} ./{mode}/")
     
 if __name__ == '__main__':

@@ -49,6 +49,7 @@ def main(log_dir: str):
                         break
                 else:
                     test_results[key].append(None)
+                    print(f"Could not find {key} in {log_dir}/tests_{i}.log")
     df = pd.DataFrame(test_results)
     ax = df.plot(
         kind="bar", 

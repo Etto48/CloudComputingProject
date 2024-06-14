@@ -36,6 +36,11 @@ def run(args: str, index: int, mode: str):
     log_path = f"{mode}_{index}.log"
     output_path = f"{mode}_{index}.csv"
     
+    if os.path.exists(log_path):
+        os.remove(log_path)
+    if os.path.exists(output_path):
+        os.remove(output_path) 
+    
     cmd1 = f"hadoop jar letterfreq-0.1.0.jar it.unipi.LetterFreq {args}".split()
     cmd2 = f"hadoop fs -getmerge output {output_path}".split()
     

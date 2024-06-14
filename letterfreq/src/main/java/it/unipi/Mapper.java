@@ -30,9 +30,7 @@ public class Mapper extends org.apache.hadoop.mapreduce.Mapper<Object, Text, Cha
             value.set(combinerCounters.get(i));
             context.write(key, value);
         }
-        key.set('*');
-        value.set(sum);
-        context.write(key, value);
+        context.getCounter("LetterFreq", "total").increment(sum);
     }
 
     @Override
