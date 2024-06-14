@@ -60,46 +60,35 @@ def main(log_dir: str):
                             values_for_this_keyword.append(value)  
                     test_results[key].append(values_for_this_keyword)
                     
-        size_for_each_key = {}
-        for key in test_results.keys():
-            for elem in test_results[key]:
-                if key in size_for_each_key:
-                    size_for_each_key[key] = max(size_for_each_key[key], len(elem))
-                else:
-                    size_for_each_key[key] = len(elem)
-        
-        for key in test_results.keys():
-            for elem in test_results[key]:
-                if len(elem) < size_for_each_key[key]:
-                    elem.extend([0.0] * (size_for_each_key[key] - len(elem)))
-        
-        for key in test_results.keys():
-            test_results[key] = zip(*test_results[key])
+
 
     df = pd.DataFrame(test_results)
-    ax = df.plot(
-        kind="bar", 
-        subplots=True, 
-        layout=(4,2), 
-        figsize=(10,10), 
-        legend=False, 
-        logy=True,
-    )
+    df = df.drop(index=9)
+    print(df)
+
+    df = df.drop(columns="Execution time")
+
+    # Trasforma il DataFrame in modo esplicito
+    df_transformed = pd.DataFrame()
+    for col in df.columns:
+        df_transformed[f'{col}1'] = df[col].apply(lambda x: x[0])
+        df_transformed[f'{col}2'] = df[col].apply(lambda x: x[1])
+
+    # Creazione della figura e delle sottotrame
+    fig, axes = plt.subplots(4, 2, figsize=(15, 15))
+
+    # Creazione dei grafici per ciascuna coppia di colonne
+    for i, col in enumerate(df.columns):
+        row, col_idx = divmod(i, 2)
+        df_transformed[[f'{col}1', f'{col}2']].plot(kind='bar', ax=axes[row, col_idx], width=0.8, logy=True)
+        axes[row, col_idx].set_title(f'Grafico a barre per colonne {col}1 e {col}2')
+        axes[row, col_idx].set_xlabel('Index')
+        axes[row, col_idx].set_ylabel('Values')
+        axes[row, col_idx].set_xticks(range(len(df_transformed)))
+        axes[row, col_idx].set_xticklabels(df.index)
+
+    # Miglioramento del layout
     plt.tight_layout()
-    axes_index = 0
-    exectution_time_index = df.columns.get_loc("Execution time")
-    splits_index = df.columns.get_loc("Splits")
-    
-    for ax_line in ax:
-        for a in ax_line:
-            if axes_index == exectution_time_index:
-                a.set_ylabel("Seconds")
-            elif axes_index == splits_index:
-                a.set_ylabel("Number of splits")
-                a.set_yscale("linear")
-            else:
-                a.set_ylabel("Bytes")
-            axes_index += 1
     plt.show()
 
 if __name__ == "__main__":
