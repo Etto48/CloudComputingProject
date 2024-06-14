@@ -41,11 +41,12 @@ def main(log_dir: str):
         except FileNotFoundError:
             print(f"Could not find {log_dir}/tests_{i}.log")
             for key in test_results.keys():
-                test_results[key].append(None)
+                test_results[key].append([])
         else:
             with log:
                 lines = log.readlines()
                 for key in test_results.keys():
+                    values_for_this_keyword = []
                     for line in lines:
                         if expected_keyword[key] in line:
                             starts_from = line.find(expected_keyword[key]) + len(expected_keyword[key])
@@ -56,12 +57,25 @@ def main(log_dir: str):
                                 value = int(value)
                             else:
                                 value = float(value)
-                            test_results[key].append(value)    
-                            break
-                    else:
-                        test_results[key].append(None)
-                        print(f"Could not find {key} in {log_dir}/tests_{i}.log")
-            
+                            values_for_this_keyword.append(value)  
+                    test_results[key].append(values_for_this_keyword)
+                    
+        size_for_each_key = {}
+        for key in test_results.keys():
+            for elem in test_results[key]:
+                if key in size_for_each_key:
+                    size_for_each_key[key] = max(size_for_each_key[key], len(elem))
+                else:
+                    size_for_each_key[key] = len(elem)
+        
+        for key in test_results.keys():
+            for elem in test_results[key]:
+                if len(elem) < size_for_each_key[key]:
+                    elem.extend([0.0] * (size_for_each_key[key] - len(elem)))
+        
+        for key in test_results.keys():
+            test_results[key] = zip(*test_results[key])
+
     df = pd.DataFrame(test_results)
     ax = df.plot(
         kind="bar", 
