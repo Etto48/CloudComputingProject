@@ -62,20 +62,25 @@ def run(args: str, index: int, mode: str):
         f.write(log)
     
 
-def main(mode: str, from_index: int, to_index: int):
+def main(mode: str, from_index: int, to_index: int, specific_job: int):
     arg_list = args_for_output if mode == "output" else args_for_tests
-    for i,args in enumerate(arg_list):
-        if i < from_index or (to_index is not None and i >= to_index):
-            print(f"Skipping job {i}/{len(arg_list)} with args {args}...")
-            continue
-        
-        print(f"Running job {i}/{len(arg_list)} with args {args}...")
-        run(args, i, mode)
+    if specific_job is None:
+        for i,args in enumerate(arg_list):
+            if i < from_index or (to_index is not None and i >= to_index):
+                print(f"Skipping job {i}/{len(arg_list)} with args {args}...")
+                continue
+            
+            print(f"Running job {i}/{len(arg_list)} with args {args}...")
+            run(args, i, mode)
+    else:
+        print(f"Running specific job {specific_job}/{len(arg_list)} with args {arg_list[specific_job]}...")
+        run(arg_list[specific_job], specific_job, mode)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Run the LetterFreq Hadoop job")
     parser.add_argument("-m", "--mode", type=str, choices=["output", "tests"], default="output", help="Choose the mode to run the job")
     parser.add_argument("-f", "--from-index", type=int, default=0, help="Start from a specific job (inclusive)")
     parser.add_argument("-t", "--to-index", type=int, default=None, help="End at a specific job (exclusive)")
+    parser.add_argument("-s", "--specific-job", type=int, default=None, help="Run a specific job by index (overrides from/to index)")
     args = parser.parse_args()
-    main(args.mode, args.from_index, args.to_index)
+    main(args.mode, args.from_index, args.to_index, args.specific_job)
