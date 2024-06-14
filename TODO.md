@@ -9,17 +9,19 @@
 
 - [x] Parse the data into raw txt containing text only
 
-- [ ] Write a version of the program that works and remember to add
+- [x] Write a version of the program that works and remember to add
   - [x] Combiner and In-Mapper Combiner
   - [x] Setup and Cleanup methods
-  - [ ] Add experiments with different number of reducers
+  - [x] Add experiments with different number of reducers
 
-- [ ] Carry out experiments
-  - [ ] Letter frequency per language
-  - [ ] Statistics on execution
-    - [ ] execution time
-    - [ ] Memory usage
-    - [ ] Number of InputSplits
-    - [ ] Impact of In-Mapper Combiner
+- [x] Carry out experiments
+  - [x] Letter frequency per language
+  - [x] Statistics on execution
+    - [x] execution time
+    - [x] Memory usage
+    - [x] Number of InputSplits
+    - [x] Impact of In-Mapper Combiner
+
+- [ ] Fix bugs
 
 - [ ] Write a short report (LaTeX)
