@@ -44,8 +44,7 @@ fn main() {
 
     for i in 0..LETTER_COUNT {
         let frequency = values[i] as f64 / values[LETTER_COUNT] as f64;
-        output[i].frequency = frequency;  
-        output[i].count = values[i];      
+        output[i].frequency = frequency;
     }
     let output_file = std::fs::File::create(args.output).unwrap();
     let mut writer = csv::WriterBuilder::new()

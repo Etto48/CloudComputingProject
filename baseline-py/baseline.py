@@ -22,16 +22,11 @@ def main(input_file: str, output_file: str):
                     total += 1
             line = f.readline()
         
-    
-    
-    
-    
     for letter in letter_dict:
-        letter_dict[letter] = (letter, letter_dict[letter] / total, letter_dict[letter])
+        letter_dict[letter] = letter_dict[letter] / total
     
     
-    
-    df = pd.DataFrame(letter_dict.values(), columns=['letter', 'frequency', 'count']).sort_values(by='letter')
+    df = pd.DataFrame(letter_dict.items(), columns=['letter', 'frequency']).sort_values(by='letter')
     df.to_csv(output_file, sep='\t', index=False, header=False)
     print(f"Done in {(time.time() - start)}s")
     

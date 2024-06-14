@@ -23,7 +23,15 @@ expected_keyword = {
 
 def main(log_dir: str):
     files = os.listdir(log_dir)
-    for i in range(len(files)):
+    log_files = 0
+    for file in files:
+        if file.endswith(".log"):
+            log_files += 1
+    if log_files == 0:
+        print("No log files found in the specified directory")
+        return
+    
+    for i in range(log_files):
         with open(f"{log_dir}/tests_{i}.log", "r") as log:
             lines = log.readlines()
             for key in test_results.keys():

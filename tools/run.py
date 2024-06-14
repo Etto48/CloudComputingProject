@@ -9,27 +9,27 @@ args_for_output = [
 ]
 
 args_for_tests = [
-    "-i english.txt -r 1",
-    "-i english.txt -r 2",
-    "-i english.txt -r 4",
-    "-i english.txt -r 8",
-    "-i english.txt -r 1 --no-combiner",
-    "-i english.txt -r 1 --no-in-mapper-combiner",
-    "-i english.txt -r 1 --no-in-mapper-combiner --no-combiner",
-    "-i english.txt -r 4 --no-combiner",
-    "-i english.txt -r 4 --no-in-mapper-combiner",
-    "-i english.txt -r 4 --no-in-mapper-combiner --no-combiner",
-    "-i part_100MB.txt -r 1",
-    "-i part_200MB.txt -r 1",
-    "-i part_300MB.txt -r 1",
-    "-i part_400MB.txt -r 1",
-    "-i part_500MB.txt -r 1",
-    "-i part_600MB.txt -r 1",
-    "-i part_700MB.txt -r 1",
-    "-i part_800MB.txt -r 1",
-    "-i part_900MB.txt -r 1",
-    "-i part_1000MB.txt -r 1",
-    "-i part_1100MB.txt -r 1",
+    "-i english.txt -r 1", # 0
+    "-i english.txt -r 2", # 1
+    "-i english.txt -r 4", # 2
+    "-i english.txt -r 8", # 3
+    "-i english.txt -r 1 --no-combiner", # 4
+    "-i english.txt -r 1 --no-in-mapper-combiner", # 5
+    "-i english.txt -r 1 --no-in-mapper-combiner --no-combiner", # 6
+    "-i english.txt -r 4 --no-combiner", # 7
+    "-i english.txt -r 4 --no-in-mapper-combiner", # 8
+    "-i english.txt -r 4 --no-in-mapper-combiner --no-combiner", # 9
+    "-i part_100MB.txt -r 1", # 10
+    "-i part_200MB.txt -r 1", # 11
+    "-i part_300MB.txt -r 1", # 12
+    "-i part_400MB.txt -r 1", # 13
+    "-i part_500MB.txt -r 1", # 14
+    "-i part_600MB.txt -r 1", # 15
+    "-i part_700MB.txt -r 1", # 16
+    "-i part_800MB.txt -r 1", # 17
+    "-i part_900MB.txt -r 1", # 18
+    "-i part_1000MB.txt -r 1", # 19
+    "-i part_1100MB.txt -r 1", # 20
 ]
 
 def run(args: str, index: int, mode: str):

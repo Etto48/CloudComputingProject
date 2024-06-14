@@ -18,7 +18,7 @@ public class Reducer extends org.apache.hadoop.mapreduce.Reducer<
             sum += val.get();
         }
         if (key.get() == '*') {
-            context.getCounter("LetterFreq", "total").setValue(sum);
+            context.getCounter("LetterFreq", "total").increment(sum);
         }
         else {
             result.set(sum);
