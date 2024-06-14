@@ -9,28 +9,36 @@ commands: dict[tuple[str,str]] = {
         "rs": ("baseline-rs", "cargo run --release --bin baseline%s -- -i ../dataset/english.txt -o output.csv"),
     }
 
-def find_child_with_name_like(process: psutil.Process, name: str) -> psutil.Process:
-    for child in process.children():
-        if name in child.name():
-            return child
-    else:
-        for child in process.children():
-            result = find_child_with_name_like(child, name)
-            if result is not None:
-                return result
-    return None
-
 def main(mode: str, no_streaming: bool):
 
     command: tuple[str,str] = commands[mode]
     command = (command[0], command[1] % ("-no-streaming" if no_streaming else ""))
     
     os.chdir(command[0])
-    process = subprocess.Popen(command[1].split(), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    process_info = psutil.Process(process.pid)
-    time.sleep(1)
-    process_info = find_child_with_name_like(process_info, "baseline" if mode == "rs" else "python")
     
+    process = subprocess.Popen(command[1], shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    process_info = psutil.Process(process.pid)
+    
+    if os.name == "nt":
+        # on windows there is no execve so we need to find the correct child process
+        while len(process_info.children()) == 0:
+            time.sleep(0.1)
+        process_info = process_info.children()[0]
+        # with python we have to take the first child because we go like:
+        # cmd.exe -> python
+        # with rust we have to take the third child because we go like:
+        # cmd.exe -> cargo -> cargo -> baseline[-no-streaming]
+        if mode == "rs":
+            while len(process_info.children()) == 0:
+                time.sleep(0.1)
+            process_info = process_info.children()[0]
+            while len(process_info.children()) == 0:
+                time.sleep(0.1)
+            process_info = process_info.children()[0]
+    
+        assert (mode == "py" and "python" in process_info.name()) or \
+            (mode == "rs" and "baseline" in process_info.name())
+    # in linux the process may have still the wrong name here so no assert
     start = time.time()
     print("Time,Virtual memory,Physical memory")
     while process.poll() is None:
