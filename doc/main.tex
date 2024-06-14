@@ -127,6 +127,9 @@
     we decided to run these tests again with 3 reducers.
     Only the 3 reducers configuration will be shown in the results.
     We also ran the Python and Rust applications with the same input file (english.txt).
+    We tested two slightly different versions of the Python and Rust applications: one that reads the
+    input file in an asynchronous way, discarding the parts of the file that have already been processed (file streaming),
+    and one that first reads the whole file into memory and then processes it.
     \begin{table}[H]
         \centering
         \begin{tabular}{|c|l|}
@@ -190,7 +193,11 @@
         \label{tab:input_split_tests}
     \end{table}
 \section{Results}
-
+    The results of the tests on the Java application are shown in Figure \ref{fig:tests_graph}.
+    The frequencies of the letters calculated by the application are shown in 
+    Figure \ref{fig:en_freq} for English, Figure \ref{fig:it_freq} for Italian and 
+    Figure \ref{fig:es_freq} for Spanish.
+    
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.48\textwidth]{figures/en.png}
