@@ -45,18 +45,22 @@ def run(args: str, index: int, mode: str):
         with open(log_path, "wb") as f:
             f.write(e.output)
         print(f"Job {index} failed with exit code {e.returncode}. Check {log_path} for more information.")
-        raise e
+        return
+    
+    try:    
+        _ = subprocess.check_output(cmd2, stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        print("Failed to save output file. Check the Hadoop logs for more information.")
         
-    _ = subprocess.check_output(cmd2, stderr=subprocess.STDOUT)
     
     with open(log_path, "wb") as f:
         f.write(log)
     
 
-def main(mode: str, skip_to: int):
+def main(mode: str, from_index: int, to_index: int):
     arg_list = args_for_output if mode == "output" else args_for_tests
     for i,args in enumerate(arg_list):
-        if i < skip_to:
+        if i < from_index or (to_index is not None and i >= to_index):
             print(f"Skipping job {i}/{len(arg_list)} with args {args}...")
             continue
         
@@ -66,6 +70,7 @@ def main(mode: str, skip_to: int):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Run the LetterFreq Hadoop job")
     parser.add_argument("-m", "--mode", type=str, choices=["output", "tests"], default="output", help="Choose the mode to run the job")
-    parser.add_argument("-s", "--skip-to", type=int, default=0, help="Skip to a specific job")
+    parser.add_argument("-f", "--from-index", type=int, default=0, help="Start from a specific job (inclusive)")
+    parser.add_argument("-t", "--to-index", type=int, default=None, help="End at a specific job (exclusive)")
     args = parser.parse_args()
-    main(args.mode, args.skip_to)
+    main(args.mode, args.from_index, args.to_index)
