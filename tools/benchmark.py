@@ -38,6 +38,15 @@ def main(mode: str, no_streaming: bool):
     
         assert (mode == "py" and "python" in process_info.name()) or \
             (mode == "rs" and "baseline" in process_info.name())
+    else:
+        # it may happen that the process will be a child of sh
+        while "sh" == process_info.name():
+            if len(process_info.children()) != 0:
+                process_info = process_info.children()[0]
+        # wait for the process to become the correct one
+        while "cargo" == process_info.name():
+            pass
+            
     # in linux the process may have still the wrong name here so no assert
     start = time.time()
     print("Time,Virtual memory,Physical memory")
