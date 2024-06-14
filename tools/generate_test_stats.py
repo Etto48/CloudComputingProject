@@ -2,17 +2,20 @@ import matplotlib.pyplot as plt
 import os
 import argparse
 import pandas as pd
+import numpy as np
 
-test_results = {
-    "Total Physical memory": [],
-    "Total Virtual memory": [],
-    "Peak Map Physical memory": [],
-    "Peak Map Virtual memory": [],
-    "Peak Reduce Physical memory": [],
-    "Peak Reduce Virtual memory": [],
-    "Splits": [],
-    "Execution time": []
-}
+keys = [
+    "Total Physical memory",
+    "Total Virtual memory",
+    "Peak Map Physical memory",
+    "Peak Map Virtual memory",
+    "Peak Reduce Physical memory",
+    "Peak Reduce Virtual memory",
+    "Splits",
+    "Execution time"
+]
+
+test_results = {key: [] for key in keys}
 
 expected_keyword = {
     "Total Physical memory": "Physical memory (bytes) snapshot=",
@@ -59,35 +62,44 @@ def main(log_dir: str):
                                 value = float(value)
                             values_for_this_keyword.append(value)  
                     test_results[key].append(values_for_this_keyword)
-                    
-
 
     df = pd.DataFrame(test_results)
-    df = df.drop(index=9)
-    print(df)
 
-    df = df.drop(columns="Execution time")
-
-    # Trasforma il DataFrame in modo esplicito
+    # Transform the dataframe and unzip the lists
     df_transformed = pd.DataFrame()
     for col in df.columns:
-        df_transformed[f'{col}1'] = df[col].apply(lambda x: x[0])
-        df_transformed[f'{col}2'] = df[col].apply(lambda x: x[1])
+        if col != "Execution time":
+            df_transformed[f"{col}1"] = df[col].apply(lambda x: x[0] if len(x) > 0 else None)
+            df_transformed[f"{col}2"] = df[col].apply(lambda x: x[1] if len(x) > 1 else None)
+        else:
+            df_transformed[col] = df[col].apply(lambda x: x[0] if len(x) > 0 else None)
 
-    # Creazione della figura e delle sottotrame
-    fig, axes = plt.subplots(4, 2, figsize=(15, 15))
-
-    # Creazione dei grafici per ciascuna coppia di colonne
+    # Create the subplots
+    fig, axes = plt.subplots(4, 2, sharex=True, figsize=(14,9))
+    # Plot the data
     for i, col in enumerate(df.columns):
         row, col_idx = divmod(i, 2)
-        df_transformed[[f'{col}1', f'{col}2']].plot(kind='bar', ax=axes[row, col_idx], width=0.8, logy=True)
-        axes[row, col_idx].set_title(f'Grafico a barre per colonne {col}1 e {col}2')
-        axes[row, col_idx].set_xlabel('Index')
-        axes[row, col_idx].set_ylabel('Values')
-        axes[row, col_idx].set_xticks(range(len(df_transformed)))
-        axes[row, col_idx].set_xticklabels(df.index)
+        ax: plt.Axes = axes[row, col_idx]
+        if col == "Execution time":
+            df_transformed[col].plot(kind='bar', ax=ax, logy=True)
+            ax.set_ylabel('Seconds')
+            ax.legend(["Total"], loc='best')
+        elif col == "Splits":
+            df_transformed[[f'{col}1', f'{col}2']].plot(kind='bar', ax=ax, legend=False)
+            ax.set_ylabel('Splits')
+        else:
+            df_transformed[[f'{col}1', f'{col}2']].plot(kind='bar', ax=ax, logy=True, legend=False)
+            ax.set_ylabel('Bytes')
+        ax.set_title(col)
+        ax.set_xlabel('Test ID')
+        ax.set_xticks(range(len(df_transformed)))
+        ax.set_xticklabels(df.index)
+        ax.set_axisbelow(True)
+        ax.grid(axis="y", linestyle="--", which="minor", linewidth=0.5)
+        ax.grid(axis="y", linestyle="--", which="major")
+    fig.legend(["Job 1", "Job 2"], loc="upper left")
 
-    # Miglioramento del layout
+    # Adjust the layout
     plt.tight_layout()
     plt.show()
 

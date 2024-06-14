@@ -16,9 +16,9 @@ args_for_tests = [
     "-i english.txt -r 1 --no-combiner", # 4
     "-i english.txt -r 1 --no-in-mapper-combiner", # 5
     "-i english.txt -r 1 --no-in-mapper-combiner --no-combiner", # 6
-    "-i english.txt -r 4 --no-combiner", # 7
-    "-i english.txt -r 4 --no-in-mapper-combiner", # 8
-    "-i english.txt -r 4 --no-in-mapper-combiner --no-combiner", # 9
+    "-i english.txt -r 3 --no-combiner", # 7
+    "-i english.txt -r 3 --no-in-mapper-combiner", # 8
+    "-i english.txt -r 3 --no-in-mapper-combiner --no-combiner", # 9
     "-i part_100MB.txt -r 1", # 10
     "-i part_200MB.txt -r 1", # 11
     "-i part_300MB.txt -r 1", # 12

@@ -41,6 +41,14 @@ public class Char implements WritableComparable<Char> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o instanceof Char) {
+            return c == ((Char)o).c;
+        }
+        return false;
+    }
+
+    @Override
     public int hashCode() {
         return Character.hashCode(c);
     }

@@ -22,6 +22,6 @@
     - [x] Number of InputSplits
     - [x] Impact of In-Mapper Combiner
 
-- [ ] Fix bugs
+- [x] Fix bugs
 
 - [ ] Write a short report (LaTeX)

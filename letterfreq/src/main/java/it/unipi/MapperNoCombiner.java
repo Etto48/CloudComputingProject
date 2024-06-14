@@ -13,8 +13,9 @@ public class MapperNoCombiner extends org.apache.hadoop.mapreduce.Mapper<Object,
     @Override
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException { 
         long sum = 0;
-        for (int c : StringUtils.stripAccents(value.toString()).chars().toArray()) {
-            int lowerC = Character.toLowerCase(c);
+        String normalizedInput = StringUtils.stripAccents(value.toString());
+        for (int i = 0; i < normalizedInput.length(); i++) {
+            int lowerC = Character.toLowerCase(normalizedInput.charAt(i));
             if (lowerC >= 'a' && lowerC <= 'z') {
                 this.key.set((char)lowerC);
                 context.write(this.key, this.one);
