@@ -219,6 +219,15 @@
             On the other hand, we can see from Tests $[10,20]$ that the execution time is almost constant
             (~56s) until the input size reaches 600MB (Test 15), after which it starts to increase linearly
             up to 76s for the 1.2GB input file (Test 0).
+        \subsubsection{Input splits}
+            From Figure \ref{fig:tests_graph} (Splits) we can see that the number of input splits 
+            increases linearly with the input size, with a minimum of 1 for the 100MB input file (Test 10) 
+            and a maximum of 9 for the 1.2GB input file (Test 0).
+            The number of input splits is not affected by the number of reducers nor by the presence of 
+            the in-mapper combiner or the combiner.
+            The number of input splits of the second job is linearly proportional to the number of reducers
+            of the first job, in our case it is always equal to the number of reducers. This is true
+            becaus the dimensions of the intermediate files is small.
         \subsubsection{Memory usage}
             We can see from the top two graphs in Figure \ref{fig:tests_graph} that the memory usage of the Java
             application is very high, reaching 61.3GB of virtual memory in Test 3.
