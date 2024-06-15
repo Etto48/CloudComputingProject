@@ -1,26 +1,6 @@
 \documentclass{article}
 \usepackage{multicol}
 \usepackage{graphicx}
-\usepackage{xcolor}
-\definecolor{keyword}{rgb}{0.3568627451, 0.7372549020, 0.6431372549}
-\definecolor{comment}{rgb}{0.5411764706, 0.7490196078, 0.3450980392}
-\definecolor{string}{rgb}{0.9,0.4,0}
-\definecolor{function}{rgb}{0.5,0.5,0.1}
-\usepackage{listings}
-\lstset{
-    basicstyle=\small\ttfamily,
-    breaklines=true,
-    frame=single,
-    rulecolor = \color{gray},
-    numbers=left,
-    numbersep=5pt,
-    numberstyle=\tiny,
-    showstringspaces=false,
-    tabsize=4,
-    keywordstyle=\color{keyword},
-    commentstyle=\color{comment},
-    stringstyle=\color{string},
-}
 \usepackage{hyperref}
 \hypersetup{
     colorlinks=true,
@@ -76,16 +56,13 @@
                 This mapper stores the letter counts in a vector and emits them in the cleanup method.
                 At the end of the cleanup method, the mapper increments a job counter with the number of emitted 
                 letters.
-                (Listing \ref{lst:java_mapper})
                 \item \textbf{Mapper without in-mapper combiner}: 
                 This mapper emits the letter counts (with value 1) for each letter in the map method.
                 At the end of the map method, the mapper increments a job counter with the number of emitted
                 letters.
-                (Listing \ref{lst:java_mapper_no_combiner})
             \end{itemize}
         \subsubsection{Reducer}
             The reducer receives the letter counts from the mappers and sums them up.
-            (Listing \ref{lst:java_reducer})
     \subsection{Job 2: Calculating frequencies}
         The results of the first job are saved in a temporary file and used as input for the second job.
         The counter obtained from the first job is stored in a configuration variable that is passed to the 
@@ -96,7 +73,6 @@
         \subsubsection{Reducer}
             The reducer receives the letter counts from the mappers and calculates the frequency of each letter
             using the total count that was previously stored in a configuration variable.
-            (Listing \ref{lst:java_reducer_frequency})
 \section{Dataset}
     We used three different datasets:
     \begin{itemize}
@@ -301,33 +277,6 @@
     a distributed Rust application could be significantly more efficient than an Hadoop application
     even for bigger datasets.
 \end{multicols}
-\section{Listings}
-\lstinputlisting[
-    language=Java, 
-    caption={Mapper with in-mapper combiner},
-    label={lst:java_mapper}
-]{../letterfreq/src/main/java/it/unipi/Mapper.java}
-\lstinputlisting[
-    language=Java,
-    caption={Mapper without in-mapper combiner},
-    label={lst:java_mapper_no_combiner}
-]{../letterfreq/src/main/java/it/unipi/MapperNoCombiner.java}
-\lstinputlisting[
-    language=Java,
-    caption={Reducer},
-    label={lst:java_reducer}
-]{../letterfreq/src/main/java/it/unipi/Reducer.java}
-\lstinputlisting[
-    language=Java,
-    caption={ReducerFrequency class, used to calculate the frequency of each letter},
-    label={lst:java_reducer_frequency}
-]{../letterfreq/src/main/java/it/unipi/ReducerFrequency.java}
-\lstinputlisting[
-    language=Java,
-    caption={Char class, used as a custom key},
-    label={lst:java_char}
-]{../letterfreq/src/main/java/it/unipi/Char.java}
-
 \bibliographystyle{IEEETran}
 \bibliography{references.bib}
 \end{document}
