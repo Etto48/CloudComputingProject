@@ -1,5 +1,7 @@
 # Cloud Computing - Project Report
 
+[Pdf version](doc/.aux/main.pdf)
+
 ## Abstract
 
 This report presents the development and performance evaluation of a
