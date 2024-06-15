@@ -110,9 +110,9 @@ different tests with command line arguments:
 - **`-t|--tmp`**: Temporary directory path inside the HDFS, by default
     it's set to **tmp**.
 
-We carried out 21 tests with the configurations shown in Table
-[1](#table-1-general-tests) and Table
-[2](#table-2-input-split-tests). Originally we ran tests 7, 8 and 9
+We carried out 21 tests with the configurations shown in
+[Table 1](#table-1-general-tests) and
+[Table 2](#table-2-input-split-tests). Originally we ran tests 7, 8 and 9
 with 4 reducers, but test 9 could never complete because of a Shuffle
 Error caused by a Java Heap Space error (Out Of Memory Error). Because
 of this, we decided to run these tests again with 3 reducers. Only the 3
@@ -126,18 +126,18 @@ processes it.
 
 ### Table 1: General tests
 
-  |         Test ID         |Arguments  |
-  |:-----------------------:|-----------|
-  |0|`-i english.txt -r 1`|
-  |1|`-i english.txt -r 2`|
-  |2|`-i english.txt -r 4`|
-  |3|`-i english.txt -r 8`|
-  |4|`-i english.txt -r 1 --no-combiner`|
-  |5|`-i english.txt -r 1 --no-in-mapper-combiner`|
-  |6|`-i english.txt -r 1 --no-in-mapper-combiner --no-combiner`|
-  |7|`-i english.txt -r 3 --no-combiner`|
-  |8|`-i english.txt -r 3 --no-in-mapper-combiner`|
-  |9|`-i english.txt -r 3 --no-in-mapper-combiner --no-combiner`|
+|         Test ID         |Arguments  |
+|:-----------------------:|-----------|
+|0|`-i english.txt -r 1`|
+|1|`-i english.txt -r 2`|
+|2|`-i english.txt -r 4`|
+|3|`-i english.txt -r 8`|
+|4|`-i english.txt -r 1 --no-combiner`|
+|5|`-i english.txt -r 1 --no-in-mapper-combiner`|
+|6|`-i english.txt -r 1 --no-in-mapper-combiner --no-combiner`|
+|7|`-i english.txt -r 3 --no-combiner`|
+|8|`-i english.txt -r 3 --no-in-mapper-combiner`|
+|9|`-i english.txt -r 3 --no-in-mapper-combiner --no-combiner`|
 
 ### Table 2: Input split tests
 
@@ -174,14 +174,13 @@ applications used only one logical core on one machine.
 
 ## Results
 
-The results of the tests on the Java application are shown in Figure
-[4](#figure-4-tests-results-the-x-axis-represents-the-test-id).
+The results of the tests on the Java application are shown in
+[Figure 4](#figure-4-tests-results-the-x-axis-represents-the-test-id).
 The memory usage over time of the Python and Rust applications is shown
-in Figure [5](#figure-5-python-and-rust-memory-usage-over-time-with-and-without-file-streaming). The frequencies of the letters calculated by
-the application are shown in Figure
-[1](#figure-1-english-letter-frequency) for
-English, Figure [2](#figure-2-italian-letter-frequency) for Italian and Figure
-[3](#figure-3-spanish-letter-frequency) for Spanish.
+in [Figure 5](#figure-5-python-and-rust-memory-usage-over-time-with-and-without-file-streaming). The frequencies of the letters calculated by
+the application are shown in [Figure 1](#figure-1-english-letter-frequency) for
+English, [Figure 2](#figure-2-italian-letter-frequency) for Italian and
+[Figure 3](#figure-3-spanish-letter-frequency) for Spanish.
 
 ### Figure 1: English letter frequency
 
@@ -199,7 +198,7 @@ English, Figure [2](#figure-2-italian-letter-frequency) for Italian and Figure
 
 #### Execution time
 
-From Figure [4](#figure-4-tests-results-the-x-axis-represents-the-test-id)
+From [Figure 4](#figure-4-tests-results-the-x-axis-represents-the-test-id)
 (Execution time) we can see that the
 execution time of the Java application with the complete dataset as
 imput (Tests $[0,9]$) has a minimum value of 76s and a maximum value of
@@ -220,7 +219,7 @@ increase linearly up to 76s for the 1.2GB input file (Test 0).
 
 #### Input splits
 
-From Figure [4](#figure-4-tests-results-the-x-axis-represents-the-test-id)
+From [Figure 4](#figure-4-tests-results-the-x-axis-represents-the-test-id)
 (Splits) we can see that the number of input splits
 increases linearly with the input size, with a minimum of 1 for the 100MB input file (Test 10)
 and a maximum of 9 for the 1.2GB input file (Test 0).
@@ -232,8 +231,8 @@ becaus the dimensions of the intermediate files is small.
 
 #### Memory usage
 
-We can see from the top two graphs in Figure
-[4](#figure-4-tests-results-the-x-axis-represents-the-test-id)
+We can see from the top two graphs in
+[Figure 4](#figure-4-tests-results-the-x-axis-represents-the-test-id)
 that the memory usage of the Java application is very high, reaching
 61.3GB of virtual memory in Test 3. The memory usage increases with the
 number of reducers. The absence of the in-mapper combiner and the
