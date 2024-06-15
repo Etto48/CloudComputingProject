@@ -48,8 +48,8 @@
     designed to count letter frequencies in large datasets using the Hadoop framework. 
     To provide a comprehensive analysis, we also implemented and tested non-distributed 
     applications in Python and Rust for comparison.
-    The results show that for the sizes of the datasets considered, Java and Python execution 
-    times are comparable, while Rust is significantly faster. 
+    The results show that for the sizes of the datasets considered, Java takes less time to complete 
+    than Python, while Rust is significantly faster than Java. 
     Both Python and Rust applications used significantly less memory than the Java application.
 \end{abstract}
 \begin{multicols}{2}
@@ -286,6 +286,20 @@
 \begin{multicols}{2}
 
 \section{Conclusions}
+    In this work we developed a Java application to count the frequency of letters in a large dataset
+    using the Hadoop framework. We also developed non-distributed applications in Python and Rust for
+    comparison.
+    We carried out 21 tests with different configurations and input sizes one the Java application
+    and one test for each Python and Rust application then we analyzed and compared the results.
+    The Java application is faster than the Python application and slower than the Rust application.
+    The Rust application proved to be the most efficient in terms of both execution time and memory usage,
+    using up to 4800 times less memory than the Java application. 
+    The Python application still used significantly less memory than the Java application.
+    Further improvements could be made to augment the precision of the results, such as performing
+    more tests to have a more accurate average execution time and memory usage.
+    The results that a non-distributed, single-core, Rust application has obtained, suggest that 
+    a distributed Rust application could be significantly more efficient than an Hadoop application
+    even for bigger datasets.
 \end{multicols}
 \section{Listings}
 \lstinputlisting[
