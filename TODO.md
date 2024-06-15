@@ -24,4 +24,4 @@
 
 - [x] Fix bugs
 
-- [ ] Write a short report (LaTeX)
+- [x] Write a short report (LaTeX)
