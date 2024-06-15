@@ -192,12 +192,65 @@
         \caption{Input split tests}
         \label{tab:input_split_tests}
     \end{table}
+    \subsection{Equipment}
+        The tests were carried out on 3 identical virtual machines, each one with the following specifications:
+        \begin{itemize}
+            \item \textbf{CPU}: 1 core (2 logical cores) of an Intel(R) Xeon(R) Silver 4208 CPU @ 2.10GHz
+            \item \textbf{RAM}: 6.8GB
+            \item \textbf{Disk}: 40GB
+            \item \textbf{OS}: Ubuntu 22.04.4 LTS
+        \end{itemize}
+        The Java application used the whole equipment, while the Python and Rust applications used only one 
+        logical core on one machine.
 \section{Results}
     The results of the tests on the Java application are shown in Figure \ref{fig:tests_graph}.
+    The memory usage over time of the Python and Rust applications is shown in Figure \ref{fig:baseline}.
     The frequencies of the letters calculated by the application are shown in 
     Figure \ref{fig:en_freq} for English, Figure \ref{fig:it_freq} for Italian and 
     Figure \ref{fig:es_freq} for Spanish.
-    
+    \subsection{Java}
+        \subsubsection{Execution time}
+            From Figure \ref{fig:tests_graph} (Execution time) we can see that the execution time of the
+            Java application with the complete dataset as imput (Tests $[0,9]$) has a minimum value of 76s and
+            a maximum value of 893s.
+            Execution time increases significantly when the in-mapper combiner is not used (Tests ${5,6,8,9}$)
+            and increases further when the combiners are also disabled (Tests ${6,9}$).
+            More reducers lead to a slight increase in execution time when using the in-mapper combiner 
+            (Tests ${0,1,2,3}$). Execution time of Test 9 is smaller than the one of Test 6 because the
+            higher number of reducers helps with the processing speed of the big amount of data produced 
+            by the mappers without in-mapper combiners nor combiners.
+            In all other cases, the overhead of more reducers is not compensated by the speedup in processing.
+            We suppose that a big factor in this overhead is the memory usage increase due to the necessity of
+            a shuffle phase.
+            On the other hand, we can see from Tests $[10,20]$ that the execution time is almost constant
+            (~56s) until the input size reaches 600MB (Test 15), after which it starts to increase linearly
+            up to 76s for the 1.2GB input file (Test 0).
+        \subsubsection{Memory usage}
+            We can see from the top two graphs in Figure \ref{fig:tests_graph} that the memory usage of the Java
+            application is very high, reaching 61.3GB of virtual memory in Test 3.
+            The memory usage increases with the number of reducers. 
+            The absence of the in-mapper combiner and the combiner does not significantly affect the 
+            total virtual memory usage. On the other hand, it significantly increases the virtual memory 
+            usage of the reducers. 
+            We think that this is due to the fact the most of the memory used by the mappers is released
+            before the reducers start.
+            We also see that the total memory usage scales linearly with the input size: with a minimum of
+            7.2GB for the 100MB input file (Test 10) and a maximum of 36GB for the 1.2GB input file (Test 0).
+            When we used 1 reducer, the memory usage of the second job was negligible compared to the first job.
+            With more reducers, we had more input files for the second job, which increased the linearly
+            the memory usage of the second job, up to 32.4GB for 8 reducers (Test 3).
+    \subsection{Python}
+        The Python application completed after 293s using file streaming and 298s without it, 
+        taking approximately 4 times more than the Java application (Test 0).
+        The memory usage is of 0.27GB with file streaming and 2.65GB without it, using up to 
+        133 times less memory than the Java application (Test 0).
+    \subsection{Rust}
+        The Rust application completed after 24s using file streaming and 19s without it, taking
+        3 to 4 times less than the Java application (Test 0).
+        The memory usage is of 0.0075GB with file streaming and 4.26GB without it, using up to
+        4800 times less memory than the Java application (Test 0).
+        These results show the efficiency of Rust in terms of both execution time and memory usage and
+        the huge overhead of an interpreted language plus the Hadoop framework.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.48\textwidth]{figures/en.png}
